@@ -1,0 +1,145 @@
+#include <stdio.h>
+#include <stdlib.h>
+char jogador= 'X';
+char tab[6][7];
+int ganhador, rodada, empatou;
+int linha, coluna;
+void ExibeTabuleiro()
+{
+    int i, j;
+    printf("\n");
+    for( i=0; i<6; i++)
+    {
+        for(j=0; j<7; j++)
+        {
+            if(j==0)
+            {
+                printf("| %c |",tab[0]);
+            }
+            else
+            {
+                printf(" %c |",tab[j]);
+            }
+        }
+        printf("\n");
+    }
+    printf("+---------------------------+\n");
+}
+void TrocarJogador ()
+{
+    {
+        if (jogador =='X')
+        {
+            jogador = '0';
+        }
+        else
+        {
+            jogador = 'X';
+        }
+    }
+}
+void Jogada()
+{   rodada= 0;
+    int a,b;
+    printf("Jogador %c, informe a coluna da sua jogada: ", jogador);
+    scanf("%d",&coluna);
+    while(coluna<0 || coluna>6)
+    {
+        printf("Coluna invalida! Digite outro valor para coluna: \n");
+        scanf("%d", &coluna);
+    }
+    coluna --;
+    linha=5;
+    while(tab[linha][coluna]!= ' ')
+    {
+        if(linha>=0)
+        {
+            linha --;
+        }
+        else
+        {
+            printf("Essa coluna esta cheia. Informe outra coluna:");
+            scanf("%d", &coluna);
+            linha=5;
+        }
+    }
+    rodada ++;
+}
+int vencer()
+{
+    int i, j,a,b;
+    for(i=0; i<6; i++) // PECORRE AS LINHAS DO TABULEIRO
+    {
+        for(j=0; j<4; j++) // PERCORRE AS COLUNAS DO TABULEIRO
+        {
+            if(tab[j]==tab[j+1] && tab[j+2]==tab[j+3] &&tab[j]==tab[j+3] && tab[j]!=' ') // GANHA POR LINHA
+                printf("O jogador %c ganhou. PARABENS!\n",jogador);
+            ganhador=1;
+        }
+    }
+    for(i=0; i<6; i++)
+    {
+        for(j=0; j<4; j++)
+        {
+            if(tab[j]==tab[j+1] && tab[j+2]==tab[j+3] && tab[j]==tab[j+2] && tab[j]!=' ') // GANHA POR COLUNA
+                printf("O jogador %c ganhou. PARABENS!\n",jogador);
+            ganhador=1;
+        }
+    }
+    for(i=0; i<4; i++)
+    {
+        for(j=0; j<3; j++)
+        {
+            if(tab[j]==tab[j+1][i+1] && tab[j+2][i+2]==tab[j+3][i+3] && tab[j]==tab[j+2][i+2] && tab[j]!=' ') // GANHA NA DIAGONAL "PRINCIPAL"
+                printf("O jogador %c ganhou. PARABENS!\n",jogador);
+            ganhador=1;
+        }
+    }
+    for(i=0; i<4; i++)
+    {
+        for(j=5; j>2; j--)
+        {
+            if(tab[j]==tab[j-1][i+1] && tab[j-2][i+2]==tab[j-3][i+3] && tab[j]==tab[j-2][i+2] && tab[j]!=' ') // GANHA NA DIAGONAL "SECUNDARIA"
+            {
+                printf("O jogador %c ganhou. PARABENS!\n",jogador);
+                ganhador=1;
+            }
+        }
+    }
+    if(rodada==43)
+        {
+            printf("\t\t\nEmpatou!!!\n");
+            return 2;
+        }
+
+    return ganhador;
+}
+void LimpaTabuleiro()
+{
+    int i,j;
+    for(i=0; i<6; i++) //PREENCHENDO O TABULEIRO COM ESPA�OS
+    {
+        for(j=0; j<7; j++)
+        {
+            tab[j]=' ';
+        }
+    }
+    rodada=1;
+    ganhador=0;
+}
+int main()
+{
+    printf("---------------------------------------------------------------------------\n|  Sejam bem-vindos ao LIGUE QUATRO.                                         |\n|  Esse jogo tem o simples objetivo de organizar quatro discos em uma fileira.|\n|  Valem tanto linhas horizontais como verticais e diagonais. Boa sorte!      |\n-------------------------------------------------------------------------------\n\n\n\n");
+    while(1==1)
+    {
+        LimpaTabuleiro();
+        while (ganhador!=1 || ganhador!=2)
+        {
+            Jogada();
+            ExibeTabuleiro();
+            vencer();
+            TrocarJogador();
+        }
+    }
+}
+ 
